@@ -1,22 +1,9 @@
 import React, {useLayoutEffect, useRef, useEffect} from "react";
 import { Footer } from "./HomePage";
 import { useLocation } from "react-router-dom";
-import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import axios from 'axios';
 
 
-
-async function predictDisease(imageUrl) {
-  try {
-    const response = await axios.post('http://localhost:3000/api/upload', {
-      imageUrl: imageUrl
-    });
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-}
 
 
 
@@ -26,41 +13,39 @@ function Result() {
   const cardRef = useRef(null);
 
 
-  async function getImageData(imageUrl, cardRef) {
-    html2canvas(cardRef.current).then(async (canvas) => {
-      const imgData = canvas.toDataURL("image/png");
-      const prediction = await predictDisease(imgData);
-      console.log(prediction); // Replace this with your code to display the prediction
-    });
+  const handleData = async () => {
+    const response = await fetch('http://localhost:3001/api/result');
+    const data = await response.json();
+    console.log(data);
   }
   
   useEffect(() => {
-    getImageData(decodeURIComponent(imageUrl), cardRef);
+    handleData();
   }, []);
 
 
-  const downloadPDF = () => {
-    getImageData(decodeURIComponent(imageUrl), cardRef);
+  // const downloadPDF = () => {
+  //   getImageData(decodeURIComponent(imageUrl), cardRef);
 
-    html2canvas(cardRef.current).then((canvas) => {
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF("p", "mm", "a4");
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
-      const imageWidth = canvas.width;
-      const imageHeight = canvas.height;
-      const margin = 10; // add some margin
-      const ratio = Math.min((pageWidth - margin * 2) / imageWidth, (pageHeight - margin * 2) / imageHeight);
-      const imageX = (pageWidth - imageWidth * ratio) / 2;
-      const imageY = (pageHeight - imageHeight * ratio) / 2;
+  //   html2canvas(cardRef.current).then((canvas) => {
+  //     const imgData = canvas.toDataURL("image/png");
+  //     const pdf = new jsPDF("p", "mm", "a4");
+  //     const pageWidth = pdf.internal.pageSize.getWidth();
+  //     const pageHeight = pdf.internal.pageSize.getHeight();
+  //     const imageWidth = canvas.width;
+  //     const imageHeight = canvas.height;
+  //     const margin = 10; // add some margin
+  //     const ratio = Math.min((pageWidth - margin * 2) / imageWidth, (pageHeight - margin * 2) / imageHeight);
+  //     const imageX = (pageWidth - imageWidth * ratio) / 2;
+  //     const imageY = (pageHeight - imageHeight * ratio) / 2;
 
-      pdf.setFillColor(6, 8, 22);
-      pdf.rect(0, 0, pageWidth, pageHeight, "F");
+  //     pdf.setFillColor(6, 8, 22);
+  //     pdf.rect(0, 0, pageWidth, pageHeight, "F");
 
-      pdf.addImage(imgData, "PNG", imageX, imageY, imageWidth * ratio, imageHeight * ratio);
-      pdf.save("download.pdf");
-    });
-  };
+  //     pdf.addImage(imgData, "PNG", imageX, imageY, imageWidth * ratio, imageHeight * ratio);
+  //     pdf.save("download.pdf");
+  //   });
+  // };
   
 
   useLayoutEffect(() => {
@@ -86,7 +71,7 @@ function Result() {
                       <div className="mb-[190px] green-pink-gradient p-[2px] rounded-[20px] shadow-card">
                         <div className=" bg-primary rounded-[20px] flex items-center">
                               <img
-                                  src= {decodeURIComponent(imageUrl)}
+                                  src= {''}
                                   alt="web-development"
                                   className="w-[390px] h-[250px] object-contain rounded-2xl"
                                 />
@@ -127,7 +112,7 @@ function Result() {
                </div>
            </div>
           <div className="flex place-content-center mt-[50px]">
-           <button className='rounded-full bg-[#915EFF] p-2 text-[20px]' onClick={downloadPDF}> Download </button>
+           <button className='rounded-full bg-[#915EFF] p-2 text-[20px]' onClick={''}> Download </button>
           </div>
         </div>
         </div>

@@ -2,55 +2,11 @@ import React,{useState} from 'react';
 import { Tilt } from 'react-tilt';
 import { motion } from "framer-motion";
 import { styles } from "../styles";
-import { useNavigate } from 'react-router-dom';
 import finger from "../../assets/finger.png"
+import ImageUploader from '../constants/ImageUploader';
 
 
 const ServiceCardThroughWrit = ({}) => {
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [uploadComplete, setUploadComplete] = useState(false);
-  const [uploadedImage, setUploadedImage] = useState(null);
-  
-  const navigate = useNavigate();
-
-  const handleNavigate = () => {
-    const imageUrl = encodeURIComponent(URL.createObjectURL(uploadedImage));
-    navigate(`/handwritingresult?image=${imageUrl}`);
-  };
-  
-  const handleUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const formData = new FormData();
-      formData.append("file", file);
-  
-      const xhr = new XMLHttpRequest();
-      xhr.open("POST", "http://localhost:3000/api/upload");
-      xhr.upload.onprogress = (event) => {
-        const progress = event.loaded / event.total;
-        setUploadProgress(progress);
-      };
-      xhr.onload = () => {
-        setUploadComplete(true);
-        setUploadedImage(file);
-  
-        // Send the uploaded image to the ML model API/predict
-        const apiUrl = "http://localhost:3000/api/predict";
-        const imageData = new FormData();
-        imageData.append("file", file);
-  
-        const xhr2 = new XMLHttpRequest();
-        xhr2.open("POST", apiUrl);
-        xhr2.onload = () => {
-          const response = JSON.parse(xhr2.responseText);
-          console.log(response);
-        };
-        xhr2.send(imageData);
-      };
-      xhr.send(formData);
-    }
-  };
-  
 
   return (
       <Tilt>
@@ -85,38 +41,44 @@ const ServiceCardThroughWrit = ({}) => {
                 type="file"
                 accept=".jpg,.jpeg,.png"
                 className="absolute w-full h-full opacity-0 cursor-pointer"
-                onChange={handleUpload}
+                onChange={''}
+                multiple
               />
             </div>
           </label>
         </div>
       </motion.div>
-      {uploadProgress > 0 && (
-            <div className="mt-3">
-              Uploading: {Math.round(uploadProgress * 100)}%
-              <motion.div
-                className="h-1 bg-gray-300 rounded-full mt-2"
-                initial={{ width: 0 }}
-                animate={{ width: `${uploadProgress * 100}%` }}
-              >
-                <motion.div
-                  className="h-full bg-[#915EFF] rounded-full"
-                  initial={{ width: 0 }}
-                  animate={{ width: "100%" }}
-                  transition={{ duration: 1 }}
-                ></motion.div>
-              </motion.div>
-            </div>
-        )}
-         {uploadComplete && (
-         <button onClick={handleNavigate} className="relative rounded-full bg-[#915EFF] p-3 mt-5 cursor-pointer"> View Result</button>
-         )}
+      <div>
+          <p>{''}</p>
+      </div>
       </Tilt>
     );
   };
   
 
 function ThroughWrit() {
+  
+  const onFileUpload = async (file) => {
+    try {
+      // Create a FormData object
+      const formData = new FormData();
+      formData.append('image', file);
+
+      // Make a POST request to your server endpoint to save the image
+      const response = await fetch('http://localhost:3001/api/uploadtest', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        console.log('Image uploaded successfully!');
+      } else {
+        console.error('Failed to upload image');
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    }
+  };
   return (
     <section className={`relative w-full h-screen mx-auto`}>
          <div
@@ -134,7 +96,7 @@ function ThroughWrit() {
                  spiral handwriting analysis can be a valuable addition to the diagnostic process.</p>
             </div>
             <div className="p-4 mb-10 mr-5">
-                <ServiceCardThroughWrit/>
+                <ImageUploader onFileUpload={onFileUpload}/>
             </div>
         </div>
       </div>
