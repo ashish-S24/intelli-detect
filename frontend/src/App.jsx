@@ -15,7 +15,7 @@ const App = () => {
           <Route exact path="/" element={<Home/>}/>
           <Route path='/predictor' element={<Predictor/>} />
           <Route path='/FingerPrintsDetect' element={<FingerPrintsDetect/>} />
-          <Route path='/FingerPrintsDetect/result' element={<Result/>} />
+          <Route path='/result' element={<Result/>} />
         </Routes>
     </BrowserRouter>
   )

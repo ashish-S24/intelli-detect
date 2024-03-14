@@ -11,7 +11,7 @@ function FingerPrintsDetect() {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
-      navigate("http://localhost:5174/FingerPrintsDetect/result");
+      navigate("/result");
   }
   useLayoutEffect(() => {
     window.scrollTo(0, 0);
