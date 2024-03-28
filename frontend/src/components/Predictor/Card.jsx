@@ -16,7 +16,7 @@ const ServiceCard = ({index , title, button}) => {
       }
       else if(index === 1)
       {
-        navigate('/');
+        navigate('/riskassesment');
       }
 
       console.log(index);
