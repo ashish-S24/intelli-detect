@@ -13,7 +13,7 @@ const storageTrain = multer.diskStorage({
     cb(null, './uploads/train'); // Save images to the 'uploads' directory
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)); // Use current timestamp as filename
+    cb(null, file.originalname); // Use current timestamp as filename
   },
 });
 
@@ -22,7 +22,7 @@ const storageTest = multer.diskStorage({
       cb(null, './uploads/test'); // Save images to the 'uploads' directory
     },
     filename: function (req, file, cb) {
-      cb(null, Date.now() + path.extname(file.originalname)); // Use current timestamp as filename
+      cb(null, file.originalname); // Use current timestamp as filename
     },
   });
 
@@ -39,6 +39,17 @@ app.post('/api/uploadtrain', cors(), uploadTrain.single('image'), (req, res) => 
 app.post('/api/uploadtest', cors(), uploadTest.single('image'), (req, res) => {
     res.status(200).send('Image uploaded successfully');
 })
+
+app.get('/api/test-image', (req, res) => {
+    const imagePath = path.join(__dirname, 'uploads', 'test', '1.png');
+
+    if (fs.existsSync(imagePath)) {
+        res.sendFile(imagePath);
+    } else {
+        console.log("Hello")
+        res.status(404).send('Image not found');
+    }
+});
 
 
 app.get('/api/result', cors(), (req, res) => {
@@ -65,7 +76,7 @@ app.get('/api/result', cors(), (req, res) => {
         const simplifiedLabels = labels.map(label => labelMapping.indexOf(label));
     
         const numCategories = labelSet.size;
-        return { images, labels: simplifiedLabels, numCategories };
+        return { images, labels: simplifiedLabels, numCategories , imageFiles };
     };
     
     
@@ -116,7 +127,7 @@ app.get('/api/result', cors(), (req, res) => {
     const trainDataDir = './uploads/train';
     const testDataDir = './uploads/test';
     
-    console.log(trainDataDir);
+  
     // Define model architecture
     const buildModel = function(numCategories) {
         // Define input layer
@@ -184,18 +195,18 @@ app.get('/api/result', cors(), (req, res) => {
             epochs: 5,
             callbacks: {
                 onEpochEnd: async (epoch, logs) => {
-                    console.log(`Epoch ${epoch + 1} - loss: ${logs.loss.toFixed(4)}, acc: ${logs.acc.toFixed(4)}`);
+                    // console.log(`Epoch ${epoch + 1} - loss: ${logs.loss.toFixed(4)}, acc: ${logs.acc.toFixed(4)}`);
                 }
             }
         });
     };
     
     // Test the model
-    const evaluateModel = async function(model, testData) {
+    const evaluateModel = async function(model, testData, testImages) {
         // Extract the input data tensor from testData
-        testData= await testData.toArray();
+        testData = await testData.toArray();
         const inputData = testData[0].xs;
-        console.log(testData[0].ys )
+        //console.log(testData[0].ys )
     
         // Make predictions for the single test image
         const predictions = await model.predict(inputData).array();
@@ -205,14 +216,16 @@ app.get('/api/result', cors(), (req, res) => {
         const confidence = Math.max(...predictions[0]);
     
         // Print the prediction results
-        console.log(`Test Image: Predicted Class - ${bestClass}, Confidence: ${(confidence * 100).toFixed(2)}%`);
+        //console.log(`Test Image: Predicted Class - ${bestClass}, Confidence: ${(confidence * 100).toFixed(2)}%`);
         res.json({
             TestImage: bestClass,
-            confidence: confidence
+            confidence: (confidence * 100).toFixed(2),
+            image: testImages
+            
         })
         // If the test label is NaN, print a warning
         if (isNaN(testData[0].ys[0])) {
-            console.warn(`Warning: Test label is NaN`);
+            //console.warn(`Warning: Test label is NaN`);
         }
     };
     
@@ -230,7 +243,7 @@ app.get('/api/result', cors(), (req, res) => {
         const trainData = preprocessImages(allTrainImages, allTrainLabels, 100, numCategories);
     
         // Load and preprocess test images and labels
-        const { images: testImages, labels: testLabels } = await loadImages(testDataDir);
+        const { images: testImages, labels: testLabels, imageFiles } = await loadImages(testDataDir);
     
         const testData = preprocessImages(testImages, testLabels, 100, numCategories);
         
@@ -239,23 +252,13 @@ app.get('/api/result', cors(), (req, res) => {
         model.summary();
         
         // Train the model
-        console.log('\nTraining model...');
+        //console.log('\nTraining model...');
         await trainModel(model, trainData);
     
         // Evaluate the model
-       console.log('\nEvaluating model...');
-        await evaluateModel(model, testData);
+       //console.log('\nEvaluating model...');
+        await evaluateModel(model, testData, imageFiles);
     
-        console.log('Shape of training data:');
-        trainData.toArray().then((dataArray) => {
-            dataArray.forEach((example) => {
-                const xsShape = example.xs.shape;
-                const ysShape = example.ys.shape;
-                console.log(`xs shape: ${xsShape}, ys shape: ${ysShape}`);
-            });
-        });
-        
-        console.log("Test data:", testData);
     
     };
     

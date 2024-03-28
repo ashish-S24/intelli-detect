@@ -8,10 +8,8 @@ import fingers from "../../assets/fingers.png"
 import ImageUploader from "../constants/ImageUploader";
 
 
-const ServiceCardThroughMRI = ({ }) => {
+const Card = ({ }) => {
 
-  
-  
   const onFileUpload = async (file) => {
     try {
       // Create a FormData object
@@ -35,16 +33,18 @@ const ServiceCardThroughMRI = ({ }) => {
   };
   return (
     <Tilt>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.5 }}
-        className={`w-[454px] green-pink-gradient p-[2px] rounded-[20px] shadow-card`}
-      >
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      className={`w-[454px] green-pink-gradient p-1 rounded-[20px] shadow-card`}
+    >
+      <div className='bg-hero-pattern bg-cover bg-no-repeat p-8 bg-center rounded-[20px]'>
         <ImageUploader onFileUpload={onFileUpload} />
-      </motion.div>
-    </Tilt>
+      </div>
+    </motion.div>
+  </Tilt>
   );
 };
 
@@ -63,7 +63,7 @@ const ThroughMRI = () => {
                 MRI is not currently used as a routine diagnostic tool for Parkinson's disease.</p>
             </div>
             <div className="p-4 mb-10 ml-5 mt-0">
-              <ServiceCardThroughMRI />
+              <Card />
             </div>
           </div>
         </div>

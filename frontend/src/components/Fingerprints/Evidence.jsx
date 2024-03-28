@@ -6,58 +6,7 @@ import finger from "../../assets/finger.png"
 import ImageUploader from '../constants/ImageUploader';
 
 
-const ServiceCardThroughWrit = ({}) => {
-
-  return (
-      <Tilt>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
-          className={`w-[454px] green-pink-gradient p-[2px] rounded-[20px] shadow-card`}
-        >
-          <div
-            options={{
-              max: 45,
-              scale: 1,
-              speed: 450,
-            }}
-            className="bg-tertiary rounded-[20px] py-5 px-12 h-[540px] flex justify-evenly items-center flex-col "
-          >
-          <h3 className="text-white text-[40px] font-bold text-center">
-           Evidence
-          </h3>
-          <img
-            src={finger}
-            alt="web-development"
-            className="w-21 h-23 object-contain rounded-2xl p-4"
-          />
-          <label htmlFor="upload-input2">
-            <div className="relative rounded-full bg-[#915EFF] p-3 mt-5 cursor-pointer">
-              Upload Image
-              <input
-                id="upload-input2"
-                type="file"
-                accept=".jpg,.jpeg,.png"
-                className="absolute w-full h-full opacity-0 cursor-pointer"
-                onChange={''}
-                multiple
-              />
-            </div>
-          </label>
-        </div>
-      </motion.div>
-      <div>
-          <p>{''}</p>
-      </div>
-      </Tilt>
-    );
-  };
-  
-
-function ThroughWrit() {
-  
+const Card = ({}) => {
   const onFileUpload = async (file) => {
     try {
       // Create a FormData object
@@ -80,6 +29,26 @@ function ThroughWrit() {
     }
   };
   return (
+    <Tilt>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      className={`w-[454px] green-pink-gradient p-1 rounded-[20px] shadow-card`}
+    >
+      <div className='bg-hero-pattern bg-cover bg-no-repeat p-8 bg-center rounded-[20px]'>
+        <ImageUploader onFileUpload={onFileUpload} />
+      </div>
+    </motion.div>
+  </Tilt>
+    );
+  };
+  
+
+function ThroughWrit() {
+  
+  return (
     <section className={`relative w-full h-screen mx-auto`}>
          <div
         className={`absolute inset-0 top-[120px]  max-w-7xl mx-auto ${styles.paddingX} flex flex-row items-start gap-5`}
@@ -96,7 +65,7 @@ function ThroughWrit() {
                  spiral handwriting analysis can be a valuable addition to the diagnostic process.</p>
             </div>
             <div className="p-4 mb-10 mr-5">
-                <ImageUploader onFileUpload={onFileUpload}/>
+                <Card />
             </div>
         </div>
       </div>

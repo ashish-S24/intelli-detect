@@ -24,13 +24,13 @@ const ImageUploader = ({ onFileUpload }) => {
 
   return (
     <div>
-      <div {...getRootProps({ className: 'dropzone' })}>
+      <div className='flex' {...getRootProps({ className: 'dropzone' })}>
         <input {...getInputProps()} />
         <p>Drag & drop some files here, or click to select files</p>
       </div>
-      <div>
+      <div className='grid grid-cols-2 gap-4 mt-8'>
         {images.map((image, index) => (
-          <img key={index} src={image} alt={`Uploaded ${index}`} style={{ maxWidth: '200px', maxHeight: '200px' }} />
+          <img className='' key={index} src={image} alt={`Uploaded ${index}`} style={{ maxWidth: '200px', maxHeight: '200px' }} />
         ))}
       </div>
     </div>
