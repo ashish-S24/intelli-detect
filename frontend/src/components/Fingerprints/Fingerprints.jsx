@@ -50,9 +50,9 @@ const Card = ({ }) => {
 
 const ThroughMRI = () => {
   return (
-    <section className={`relative w-full h-screen mx-auto mb-[80px] mt-7`}>
+    <section className={`relative w-full h-[500px] mx-auto mb-[80px] mt-7`}>
       <div
-        className={`absolute inset-0 top-[120px]  max-w-7xl mx-auto ${styles.paddingX} flex flex-row items-start gap-5`}
+        className={`absolute inset-0 top-[420px]  max-w-7xl mx-auto ${styles.paddingX} flex flex-row items-start gap-5`}
       >
         <div>
           <div className='flex flex-row '>

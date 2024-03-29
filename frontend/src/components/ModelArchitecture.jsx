@@ -22,7 +22,16 @@ const ModelArchitecture = () => {
                             </h1>
                             <div className='mt-10'>
                                 <p className=' text-2xl font-semibold'>
-                                    Choosing the right college is crucial for a successful future. Don't leave it to chance - trust our college rank predictor to guide you. Our sophisticated algorithm considers academic performance, admission criteria, and college ranking to predict your chances of getting into your dream college. Make informed decisions with our accurate and reliable college ranking predictor.
+                                    The model architecture employs a Convolutional Neural
+                                    Network (CNN) for fingerprint detection, leveraging its ability
+                                    to learn spatial hierarchies of features from input images. The
+                                    Adam optimizer is used for parameter adjustment, aiming to
+                                    minimize the loss function during training. ReLU activation
+                                    functions within convolutional layers enhance the model's
+                                    capacity to learn complex patterns, while softmax activation
+                                    at the output layer produces interpretable class probabilities.
+                                    This approach ensures accurate fingerprint detection for
+                                    biometric authentication and forensic analysis.
                                 </p>
                             </div>
                         </div>

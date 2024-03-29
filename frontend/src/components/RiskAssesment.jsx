@@ -4,11 +4,21 @@ import { styles } from './styles';
 import { Footer } from './HomePage';
 import UserForm from './RiskAssesment/UserForm';
 import { PrimeReactProvider } from 'primereact/api';
+import Result from './RiskAssesment/Result';
+import { ScrollTop } from 'primereact/scrolltop';
 
 const RiskAssesment = () => {
     const [isInputSet, setIsInputSet] = useState(false);
-
+    const [askForAuth, setAskForAuth] = useState(false);
     const [childData, setChildData] = useState();
+
+    const onSubmit = (data) => {
+        window.scroll({
+            top: 0,
+            behavior: 'smooth',
+        });
+        setAskForAuth(true);
+    }
 
     const receiveDataFromChild = (data) => {
         setChildData(data);
@@ -36,27 +46,39 @@ const RiskAssesment = () => {
                                         isInputSet ?
                                             (
                                                 <div className='flex flex-col gap-3 font-semibold text-2xl'>
-                                                    <p>Name: {childData.name}</p>
+                                                    <p className='flex gap-4'><p className='text-[#0D6EFD]'>Name:</p> {childData.name}</p>
                                                     <span className='flex gap-10'>
-                                                        <p>Age: {childData.age}</p>
-                                                        <p>Gender: {childData.gender}</p>
+                                                        <p className='flex gap-4'><p className='text-[#0D6EFD]'>Age:</p> {childData.age}</p>
+                                                        <p className='flex gap-4'><p className='text-[#0D6EFD]'>Gender:</p> {childData.gender}</p>
                                                     </span>
-                                                    <p>Mobile Number : {childData.mobile}</p>
-                                                    <p>Email Address: {childData.email}</p>
+                                                    <p className='flex gap-4'><p className='text-[#0D6EFD]'>Mobile No:</p> {childData.mobile}</p>
+                                                    <p className='flex gap-4'><p className='text-[#0D6EFD]'>Email Address:</p> {childData.email}</p>
                                                 </div>
                                             )
                                             :
                                             <p className=' text-2xl font-semibold'>
-                                                Choosing the right college is crucial for a successful future. Don't leave it to chance - trust our college rank predictor to guide you. Our sophisticated algorithm considers academic performance, admission criteria, and college ranking to predict your chances of getting into your dream college. Make informed decisions with our accurate and reliable college ranking predictor.
+                                                To provide the necessary data for the crime risk assessment,
+                                                please input the following information. Your privacy and
+                                                confidentiality are our top priorities.
+                                                To begin the crime risk assessment, please click on the "Start
+                                                Test" button below after entering your information.
                                             </p>
                                     }
                                 </div>
                             </div>
                         </div>
-                        <div className='mt-20 w-full'>
-                            {
-                                isInputSet ? <CriminalBehaviorAssessment />
-                                    : <UserForm sendDataToParent={receiveDataFromChild}/>
+                        <div className='mt-20 w-full h-fit'>
+                            {askForAuth ?
+                                <div className='relative h-[1200px]'>
+                                    <Result value={50} />
+                                </div>
+                                :
+                                <div>
+                                    {
+                                        isInputSet ? <CriminalBehaviorAssessment onSubmit={onSubmit} />
+                                            : <UserForm sendDataToParent={receiveDataFromChild} />
+                                    }
+                                </div>
                             }
                         </div>
                     </div>

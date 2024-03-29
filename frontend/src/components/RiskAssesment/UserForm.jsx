@@ -11,19 +11,38 @@ const UserForm = (props) => {
         gender: '',
     });
 
+    const [validInputs, setValidInputs] = useState({
+        name: false,
+        age: false,
+        email: false,
+        mobile: false,
+        gender:false
+    });
+
     // Function to handle changes in input fields
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setFormData({ ...formData, [name]: value });
-        if(name == 'gender'){
-            setSelectedGender(event.target.value);
-        }
+
+        // Update validation state for the current input field
+        setValidInputs({ ...validInputs, [name]: true });
         
+        if(name === 'gender'){
+            setSelectedGender(event.target.value);
+            setValidInputs({...validInputs, [name]: true})
+        }
     };
 
     const sendDataToParent = () => {
-        console.log(formData);
-        props.sendDataToParent(formData);
+        // Check if all input fields are valid
+        const allInputsValid = Object.values(validInputs).every(input => input);
+        console.log(validInputs);
+        if (allInputsValid) {
+            console.log(formData);
+            props.sendDataToParent(formData);
+        } else {
+            alert('Please fill all the fields.');
+        }
     };
 
     const genders = ["Male", "Female"]

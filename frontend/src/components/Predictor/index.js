@@ -6,7 +6,7 @@
     },
     {
       title: "Crime risk Assessment",
-      button:"Coming Soon..!"
+      button:"Explore"
     },
   ];
 

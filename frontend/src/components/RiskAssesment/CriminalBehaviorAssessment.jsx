@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { questions } from './questions';
-function CriminalBehaviorAssessment() {
+
+
+function CriminalBehaviorAssessment (props) {
   // State to store selected answers for each question
   const [selectedAnswers, setSelectedAnswers] = useState({});
 
@@ -10,7 +12,7 @@ function CriminalBehaviorAssessment() {
   };
 
   const onSubmitHandle = () => {
-    console.log(selectedAnswers);
+    props.onSubmit(selectedAnswers);
   }
 
   // Function to render radio buttons for a single question

@@ -24,10 +24,10 @@ function FingerPrintsDetect() {
       </div>
       <ThroughMRI/>
       <ThroughWrit/>
-      <div className='w-full flex justify-center items-center'>
-        <button onClick={handleNavigate} className="relative rounded-full bg-[#915EFF] p-3 mt-5 cursor-pointer">View Result</button>
+      <div className='w-full flex justify-center items-center mt-[150px]'>
+        <button onClick={handleNavigate} className="relative rounded-full bg-[#0D6EFD] py-3 px-5 mt-5 cursor-pointer">View Result</button>
       </div>
-      <div className='relative z-0 mt-[280px]'>
+      <div className='relative z-0 mt-[180px]'>
       <Footer/>
       </div>
     </div>
