@@ -2,10 +2,12 @@ import React from 'react';
 import { styles } from './styles';
 import architect from "../assets/architect.png";
 import { Footer } from './HomePage';
+import Navbar from './constants/Navbar';
 
 const ModelArchitecture = () => {
     return (
         <div className='bg-primary h-full'>
+            <Navbar/>
             <section className={`relative w-full h-screen mx-auto bg-primary `}>
                 <div
                     className={`relative inset-0 top-[120px]  max-w-7xl mx-auto ${styles.paddingX - 1} flex flex-col items-start gap-5`}

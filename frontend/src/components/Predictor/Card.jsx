@@ -48,7 +48,7 @@ const ServiceCard = ({index , title, button}) => {
         <h3 className="text-white text-[40px] font-bold text-center">
           {title}
         </h3>
-          <button id={index} className='rounded-full bg-[#915EFF] px-5 py-2 mt-5  text-[15px]'> {button} </button>
+          <button id={index} className='rounded-full bg-[#0D6EFD] px-5 py-3 mt-5  text-[15px]'> {button} </button>
         </div>
       </motion.div>
     </Tilt>

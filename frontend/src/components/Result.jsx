@@ -1,40 +1,56 @@
 import React, { useLayoutEffect, useRef, useEffect, useState } from "react";
+import timer from '../assets/timer.gif';
 import { Footer } from "./HomePage";
 import { useLocation } from "react-router-dom";
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf'
+import Navbar from "./constants/Navbar";
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 
 function Result() {
   const cardRef = useRef(null);
   const [testImage, setTestImage] = useState();
   const [confidence, setConfindence] = useState();
   const [image, setImage] = useState();
+  const [fetchedData , setFetchedData] = useState(false);
 
   const handleData = async () => {
     const response = await fetch('http://localhost:3001/api/result');
     const data = await response.json();
-    setTestImage(data.TestImage);
+    
   }
 
   const displayImage = async () => {
-      const response = await fetch('http://localhost:3001/api/test-image');
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const blob = await response.blob();
-      const imageUrl = URL.createObjectURL(blob);
-      setImage(imageUrl);
-  };
+    try {
+        const response = await fetch('http://localhost:3001/api/test-image');
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const responseData = await response.json();
+        const { temp , confidence, matchedImage } = responseData;
 
-  const randomConfidence = () => {
-    const randomNumber = Math.random();
-    const scaledNumber = (randomNumber * (98.85 - 96.00)) + 96.00;
-    const roundedNumber = scaledNumber.toFixed(2);
-    setConfindence(roundedNumber);
-  }
+        const imageResponse = await fetch(`http://localhost:3001/api/send-file/${temp}`);
+        if (!imageResponse.ok) {
+            throw new Error('Image response was not ok');
+        }
+        const blob = await imageResponse.blob();
+        const imageUrl = URL.createObjectURL(blob);
+
+        setImage(imageUrl);
+        console.log(imageUrl);
+        // Use additionalData as needed
+       setConfindence(confidence);
+       console.log(matchedImage)
+      setTestImage(matchedImage);
+    } catch (error) {
+        console.error('Error:', error.message);
+    }
+};
+
   useEffect(() => {
-    handleData();
-    randomConfidence();
+    setTimeout(()=>{
+      setFetchedData(true);
+    }, 4000)
     displayImage();
   }, []);
 
@@ -62,7 +78,11 @@ function Result() {
 
 
   return (
-    <div className="bg-primary">
+    <div className="bg-primary relative">
+      <div className={`absolute w-screen h-full z-40 bg-primary flex items-center justify-center ${fetchedData ? 'hidden':'visible'}`}>
+        <img src={timer} className="w-[100px] h-[100px]"></img>
+      </div>
+      <Navbar/>
       <section className={`w-full  mx-auto bg-primary mb-[180px]`}>
         <div id="card" className='flex w-full place-content-around'>
           <div>
@@ -87,6 +107,7 @@ function Result() {
                       </div>
                     </div>
                   </div>
+                  {
                   <div className="w-1/2 ml-12 flex flex-col items-start justify-center">
                     <p className="mt-4 text-secondary text-[20px] max-w-3xl leading-[30px]">
                       Image Size : 500 KB
@@ -100,13 +121,14 @@ function Result() {
                     <p className="mt-4 text-secondary text-[20px] max-w-3xl leading-[30px]">
                       confindence : {confidence} %
                     </p>
-                  </div>
+                  </div> 
+                  }
                 </div>
 
               </div>
             </div>
             <div className="flex place-content-center mt-[50px]">
-              <button className='rounded-full bg-[#915EFF] p-2 text-[20px]' onClick={downloadPDF}> Download </button>
+              <button className='rounded-full bg-[#0D6EFD] py-3 px-5 text-[20px]' onClick={downloadPDF}> Download </button>
             </div>
           </div>
         </div>

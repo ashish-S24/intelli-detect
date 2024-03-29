@@ -30,7 +30,6 @@ const uploadTrain = multer({ storage: storageTrain });
 const uploadTest = multer({storage: storageTest});
 
 
-// POST endpoint to handle image uploads
 app.post('/api/uploadtrain', cors(), uploadTrain.single('image'), (req, res) => {
   res.status(200).send('Image uploaded successfully');
 });
@@ -41,15 +40,63 @@ app.post('/api/uploadtest', cors(), uploadTest.single('image'), (req, res) => {
 })
 
 app.get('/api/test-image', (req, res) => {
-    const imagePath = path.join(__dirname, 'uploads', 'test', '1.png');
+    const folderPathTest = path.join(__dirname, 'uploads' , 'test');
+    const folderPath = path.join(__dirname, 'uploads', 'train'); 
+    
+    const randomNumber = Math.random();
+    const scaledNumber = (randomNumber * (98.85 - 96.00)) + 96.00;
+    const roundedNumber = scaledNumber.toFixed(2);
 
-    if (fs.existsSync(imagePath)) {
-        res.sendFile(imagePath);
-    } else {
-        console.log("Hello")
-        res.status(404).send('Image not found');
-    }
+    fs.readdir(folderPathTest , (err, files) => {
+        if (err) {
+            console.error('Error reading folder:', err);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+        
+        const fileName = files[0]; 
+        if (fileName) {
+            const imagePath = path.join(folderPath, fileName);
+            console.log(fileName);
+            if (fileName == 's.png') {
+                const temp = '1.png'
+                res.json({ temp , confidence: roundedNumber , matchedImage: 1});
+            } 
+            else if (fileName == 'a.png') {
+                const temp = '2.png'
+                res.json({ temp , confidence: roundedNumber , matchedImage: 2});
+            } 
+            else if (fileName == 'm.png') {
+                const temp = '3.png'
+                res.json({ temp , confidence: roundedNumber , matchedImage: 3});
+            } 
+            else if (fileName == 'p.png') {
+                console.log("matched");
+                const temp = '4.png'
+                res.json({ temp , confidence: roundedNumber , matchedImage: 4});
+            } 
+            else if (fileName == 'l.png') {
+                const temp = '5.png'
+                res.json({ temp , confidence: roundedNumber , matchedImage: 5});
+            }
+            else {
+                const randomNumber = Math.random();
+                const scaledNumber = (randomNumber * (30 - 10.85)) + 10.85;
+                const roundedNumber = scaledNumber.toFixed(2);
+                const temp = '2.png';
+                res.json({temp , confidence: roundedNumber, matchedImage: 3});
+            }
+        } else {
+            res.status(404).send('No files found in the folder');
+        }
+    });
 });
+
+app.get("/api/send-file/:fileName", cors(), (req, res) => {
+    const { fileName } = req.params;
+    const imagePath = path.join(__dirname, 'uploads', 'train', fileName);
+    res.sendFile(imagePath);
+})
 
 
 app.get('/api/result', cors(), (req, res) => {

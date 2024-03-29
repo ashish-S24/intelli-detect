@@ -4,6 +4,7 @@ import { Footer} from './HomePage';
 import ThroughWrit from './Fingerprints/Evidence';
 import Hero from './Fingerprints/Hero';
 import { useNavigate } from 'react-router-dom';
+import Navbar from './constants/Navbar';
 
 
 
@@ -19,6 +20,7 @@ function FingerPrintsDetect() {
 
   return (
     <div className='relative z-0 bg-primary'>
+      <Navbar />
       <div>
         <Hero/> 
       </div>

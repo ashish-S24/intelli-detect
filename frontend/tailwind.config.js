@@ -4,6 +4,13 @@ module.exports = {
   mode: "jit",
   safelist:['animate-[fade-in-down_1s_ease-in-out]'],
   theme: {
+    fontFamily :{
+      'stretch_pro' : ['Stretch Pro', 'sans-serif'],
+      'underated':[ 'Underrated' , 'sans-serif'],
+      'poppin': ['Poppins', 'sans-serif'],
+      'syne':['Syne', 'sans-serif'],
+      'road_rage' : ['Road Rage' , 'sans-serif']
+    },
     extend: {
       colors: {
         primary: "#050816",

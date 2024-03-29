@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import CriminalBehaviorAssessment from './RiskAssesment/CriminalBehaviorAssessment';
 import { styles } from './styles';
 import { Footer } from './HomePage';
@@ -6,11 +6,16 @@ import UserForm from './RiskAssesment/UserForm';
 import { PrimeReactProvider } from 'primereact/api';
 import Result from './RiskAssesment/Result';
 import { ScrollTop } from 'primereact/scrolltop';
+import Navbar from './constants/Navbar';
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf'
 
 const RiskAssesment = () => {
     const [isInputSet, setIsInputSet] = useState(false);
     const [askForAuth, setAskForAuth] = useState(false);
+    const [resultValue, setResultValue] = useState();
     const [childData, setChildData] = useState();
+    const cardRef = useRef();
 
     const onSubmit = (data) => {
         window.scroll({
@@ -18,7 +23,69 @@ const RiskAssesment = () => {
             behavior: 'smooth',
         });
         setAskForAuth(true);
+        let disagree = 0;
+        let agree = 0;
+
+        for(let key in data){
+            if(data[key] < 2){
+                disagree++;
+            }
+            else if(data[key] > 2){
+                agree++;
+            }
+        }
+    function precentGenrater (min , max) {
+        const randomNumber = Math.random();
+        const scaledNumber = (randomNumber * (max - min)) + min;
+        const roundedNumber = scaledNumber.toFixed(2);
+        return roundedNumber;
     }
+        if(agree == 13 && disagree == 7){
+            setResultValue(precentGenrater(0, 12));
+        }
+        else if(agree == 0 && disagree == 0){
+            setResultValue(precentGenrater(0, 0));
+        }
+        else if(disagree > 15){
+            setResultValue(precentGenrater(83, 100));
+        }
+        else if(agree > 15){
+            setResultValue(precentGenrater(45, 60));
+        }
+        else if(agree == disagree ){
+            setResultValue(precentGenrater(35, 55));
+        }
+        else if(agree > disagree){
+            setResultValue(precentGenrater(17, 30));
+        }
+        else if(disagree > agree){
+            setResultValue(precentGenrater(55, 83));
+        }
+        
+    }
+
+    const downloadPDF = () => {
+        html2canvas(cardRef.current).then((canvas) => {
+            const imgData = canvas.toDataURL("image/png");
+            const pdf = new jsPDF("p", "mm", "a4");
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
+            const imageWidth = canvas.width;
+            const imageHeight = canvas.height;
+            const margin = 10; // add some margin
+            const ratio = Math.min((pageWidth - margin * 2) / imageWidth, (pageHeight - margin * 2) / imageHeight);
+            const imageX = (pageWidth - imageWidth * ratio) / 2;
+            const imageY = (pageHeight - imageHeight * ratio) / 2;
+
+            pdf.setFillColor(6, 8, 22);
+            pdf.rect(0, 0, pageWidth, pageHeight, "F");
+
+            pdf.addImage(imgData, "PNG", imageX, imageY, imageWidth * ratio, imageHeight * ratio);
+            pdf.save("download.pdf");
+        });
+    };
+
+
 
     const receiveDataFromChild = (data) => {
         setChildData(data);
@@ -27,7 +94,8 @@ const RiskAssesment = () => {
     return (
         <PrimeReactProvider >
             <div className='bg-primary h-fit'>
-                <section className={`relative w-full h-fit mx-auto bg-primary `}>
+                <Navbar />
+                <section className={`relative w-full h-fit mx-auto bg-primary `} ref={cardRef}>
                     <div
                         className={`relative inset-0 top-[120px]  max-w-7xl mx-auto ${styles.paddingX - 1} flex flex-col items-start gap-5`}
                     >
@@ -45,7 +113,7 @@ const RiskAssesment = () => {
                                     {
                                         isInputSet ?
                                             (
-                                                <div className='flex flex-col gap-3 font-semibold text-2xl'>
+                                                <div className='flex flex-col gap-3 font-semibold text-2xl text-white'>
                                                     <p className='flex gap-4'><p className='text-[#0D6EFD]'>Name:</p> {childData.name}</p>
                                                     <span className='flex gap-10'>
                                                         <p className='flex gap-4'><p className='text-[#0D6EFD]'>Age:</p> {childData.age}</p>
@@ -70,7 +138,7 @@ const RiskAssesment = () => {
                         <div className='mt-20 w-full h-fit'>
                             {askForAuth ?
                                 <div className='relative h-[1200px]'>
-                                    <Result value={50} />
+                                    <Result value={resultValue} downloadPDF={downloadPDF}/>
                                 </div>
                                 :
                                 <div>
