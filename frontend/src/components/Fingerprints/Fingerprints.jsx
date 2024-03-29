@@ -50,17 +50,19 @@ const Card = ({ }) => {
 
 const ThroughMRI = () => {
   return (
-    <section className={`relative w-full h-[500px] mx-auto mb-[80px] mt-7`}>
+    <section className={`relative w-full h-[400px] mx-auto mb-[80px] mt-7`}>
       <div
-        className={`absolute inset-0 top-[420px]  max-w-7xl mx-auto ${styles.paddingX} flex flex-row items-start gap-5`}
+        className={`absolute inset-0 top-[150px]  max-w-7xl mx-auto ${styles.paddingX} flex flex-row items-start gap-5`}
       >
         <div>
           <div className='flex flex-row '>
             <div>
               <h3 className={`${styles.heroSubText} text-md`}>Upload crime suspects fingerprints:</h3>
-              <p className={`${styles.sectionSubText} m-3 mt-7 text-lg`}>MRI has shown promise as a tool for predicting
-                Parkinson's disease by analyzing brain volume, shape, and iron accumulation. However, further research is needed to fully understand its potential.
-                MRI is not currently used as a routine diagnostic tool for Parkinson's disease.</p>
+              <p className={`${styles.sectionSubText} m-3 mt-7 text-lg`}> To upload crime suspects' fingerprints, make sure you have
+            clear, high-quality images of the suspects' fingerprints.
+            Access the designated upload platform, select the files,
+            initiate the upload process, and monitor its progress.
+            fingerprint detection.</p>
             </div>
             <div className="p-4 mb-10 ml-5 mt-0">
               <Card />

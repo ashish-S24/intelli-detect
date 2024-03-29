@@ -49,20 +49,19 @@ const Card = ({}) => {
 function ThroughWrit() {
   
   return (
-    <section className={`relative w-full h-[500px] mx-auto`}>
+    <section className={`relative w-full h-[400px] mx-auto`}>
          <div
-        className={`absolute inset-0 top-[350px]  max-w-7xl mx-auto ${styles.paddingX} flex flex-row items-start gap-5`}
+        className={`absolute inset-0 top-[200px]  max-w-7xl mx-auto ${styles.paddingX} flex flex-row items-start gap-5`}
       >
         <div className='flex flex-row-reverse '>
             <div>
                  <p className={`${styles.heroSubText} text-md`}>
                   <span className='sm:block hidden'>Upload evidence:</span>
                 </p>
-                 <p className={`${styles.sectionSubText} m-3 mt-7`}>Spiral/wave handwriting analysis is a promising tool 
-                 for predicting Parkinson's disease. Studies have found that changes in handwriting movements can indicate the presence of 
-                 Parkinson's disease, and analyzing spiral handwriting movements can detect changes in speed, pressure, and size. 
-                 While further research is needed to fully understand its potential, 
-                 spiral handwriting analysis can be a valuable addition to the diagnostic process.</p>
+                 <p className={`${styles.sectionSubText} m-3 mt-7`}>Select the evidence files, initiate the upload process, and
+            monitor its progress. Once uploaded, the evidence will be
+            analyzed and compared with the suspect fingerprints to
+            identify potential matches or suspects</p>
             </div>
             <div className="p-4 mb-10 mr-5">
                 <Card />

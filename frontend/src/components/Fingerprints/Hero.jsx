@@ -15,17 +15,6 @@ const Hero = () => {
           <h1 className={`${styles.heroHeadText} text-white`}>
             Fingerprint <span className='text-[#0D6EFD]'>Detection</span>
           </h1>
-          <p className='mt-10 text-2xl font-semibold'>                            
-            To upload crime suspects' fingerprints, make sure you have
-            clear, high-quality images of the suspects' fingerprints.
-            Access the designated upload platform, select the files,
-            initiate the upload process, and monitor its progress.
-            fingerprint detection
-            Select the evidence files, initiate the upload process, and
-            monitor its progress. Once uploaded, the evidence will be
-            analyzed and compared with the suspect fingerprints to
-            identify potential matches or suspects.
-          </p>
         </div>
       </div>
     </section>
